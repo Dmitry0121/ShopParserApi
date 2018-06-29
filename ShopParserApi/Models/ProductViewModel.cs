@@ -20,7 +20,6 @@ namespace ShopParserApi.Models
                                    let maxId = ChangePrices.Max(p => p.Id)
                                    where v.Id == maxId
                                    select v.ChangePrice).FirstOrDefault();
-
                     return lastVal;
                 }
                 else

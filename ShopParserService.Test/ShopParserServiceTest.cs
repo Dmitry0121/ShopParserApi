@@ -11,8 +11,7 @@ namespace ShopParserService.Test
 {
     [TestClass]
     public class ShopParserServiceTest
-    {
-        /*
+    {        
         [TestMethod]
         public void ReturnsResultWithAListOfProducts()
         {
@@ -26,6 +25,42 @@ namespace ShopParserService.Test
 
             // Assert        
             Assert.AreEqual(GetTestProducts().Count, result.Count());
+        }       
+
+        [TestMethod]
+        public void ReturnsProductWithPrices()
+        {
+            // Arrange      
+            var mock = new Mock<IRepository>();
+            int article = 99;
+            mock.Setup(repo => repo.Get(p => p.Article == article, "ChangePrices"))
+                .Returns(GetTestProducts().FirstOrDefault(p=>p.Article == article));
+
+            mock.Setup(repo => repo.GetAll("ChangePrices")).Returns(GetTestProducts());
+            var _productService = new ProductService(mock.Object);
+
+            // Act
+            var result = _productService.GetProduct(article);
+
+            // Assert       
+            var product = GetTestProducts().FirstOrDefault(p => p.Article == article);
+            Assert.AreEqual(product.Title, result.Title);
+            Assert.AreEqual(product.ChangePrices.Count, result.ChangePrices.Count());
+        }
+     
+        [TestMethod]
+        public void SendNullUrl()
+        {
+            // Arrange 
+            var mock = new Mock<IRepository>();
+            int countBefore = GetTestProducts().Count;
+            var _productService = new ProductService(mock.Object);
+
+            // Act
+            _productService.ParseProducts("");
+
+            // Assert       
+            Assert.AreEqual(countBefore, GetTestProducts().Count);
         }
 
         private List<Product> GetTestProducts()
@@ -56,39 +91,5 @@ namespace ShopParserService.Test
             products.Add(product);
             return products;
         }
-
-        [TestMethod]
-        public void ReturnsProductWithPrices()
-        {
-            // Arrange      
-            var mock = new Mock<IRepository>();
-            int article = 99;
-            mock.Setup(repo => repo.Get(p => p.Article == article, "ChangePrices"))
-                .Returns(GetTestProducts().FirstOrDefault(p=>p.Article == article));
-            var _productService = new ProductService(mock.Object);
-
-            // Act
-            var result = _productService.GetProduct(article);
-
-            // Assert       
-            var product = GetTestProducts().FirstOrDefault(p => p.Article == article);
-            Assert.AreEqual(product.Title, result.Title);
-            Assert.AreEqual(product.ChangePrices.Count, result.ChangePrices.Count());
-        }
-     
-        [TestMethod]
-        public void SendNullUrl()
-        {
-            // Arrange 
-            var mock = new Mock<IRepository>();
-            int countBefore = GetTestProducts().Count;
-            var _productService = new ProductService(mock.Object);
-
-            // Act
-            _productService.ParseProducts("");
-
-            // Assert       
-            Assert.AreEqual(countBefore, GetTestProducts().Count);
-        }*/
     }
 }

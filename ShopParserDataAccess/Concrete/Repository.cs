@@ -13,15 +13,14 @@ namespace ShopParserDataAccess.Concrete
     public class Repository : IRepository
     {
         ShopParserContext _context;
-        public Repository()
+        public Repository(string connectionString)
         {
-            _context = new ShopParserContext();
+            _context = new ShopParserContext(connectionString);
         }
 
         public IEnumerable<Product> GetAll(string includeProperties = "")
         {
             IQueryable<Product> query = _context.Set<Product>();
-
             foreach (var includeProperty in includeProperties.Split
                 (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
@@ -33,7 +32,6 @@ namespace ShopParserDataAccess.Concrete
         public Product Get (Expression<Func<Product, bool>> filter = null, string includeProperties = "")
         {
             IQueryable<Product> query = _context.Set<Product>();
-
             if (filter != null)
             {
                 query = query.Where(filter);

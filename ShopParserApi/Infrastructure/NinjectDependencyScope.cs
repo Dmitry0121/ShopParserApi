@@ -17,16 +17,18 @@ namespace ShopParserApi.Infrastructure
         public object GetService(Type serviceType)
         {
             if (resolver == null)
+            {
                 throw new ObjectDisposedException("this", "This scope has been disposed");
-
+            }
             return resolver.TryGet(serviceType);
         }
 
         public System.Collections.Generic.IEnumerable<object> GetServices(Type serviceType)
         {
             if (resolver == null)
+            {
                 throw new ObjectDisposedException("this", "This scope has been disposed");
-
+            }
             return resolver.GetAll(serviceType);
         }
 
@@ -34,8 +36,9 @@ namespace ShopParserApi.Infrastructure
         {
             IDisposable disposable = resolver as IDisposable;
             if (disposable != null)
+            {
                 disposable.Dispose();
-
+            }
             resolver = null;
         }
     }

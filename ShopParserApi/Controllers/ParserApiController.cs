@@ -32,16 +32,23 @@ namespace ShopParserApi.Controllers
 
         public ProductViewModel Get(int article)
         {
-            var product = _productService.GetProduct(article);
-            ProductViewModel viewModel = _mapperProduct.Map<ProductDTO, ProductViewModel>(product);
-            viewModel.ChangePrices = _mapperPrice.Map<IEnumerable<PriceDTO>, List<PriceViewModel>>(product.ChangePrices);
-            return viewModel;
+            if (article > 0)
+            {
+                var product = _productService.GetProduct(article);
+                ProductViewModel viewModel = _mapperProduct.Map<ProductDTO, ProductViewModel>(product);
+                viewModel.ChangePrices = _mapperPrice.Map<IEnumerable<PriceDTO>, List<PriceViewModel>>(product.ChangePrices);
+                return viewModel;
+            }
+            return null;
         }
 
         [HttpGet]
         public void Parser(string url)
         {
-            _productService.ParseProducts(url);
+            if (!string.IsNullOrEmpty(url))
+            {
+                _productService.ParseProducts(url);
+            }
         }
     }
 }

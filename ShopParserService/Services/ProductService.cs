@@ -16,9 +16,9 @@ namespace ShopParserService.Services
     public class ProductService : IProductService
     {
         IRepository _repository;
-        public ProductService()
+        public ProductService(IRepository repository)
         {
-            _repository = new Repository();
+            _repository = repository;
         }
 
         public IEnumerable<ProductDTO> GetAll()
@@ -36,6 +36,7 @@ namespace ShopParserService.Services
                     Characteristic = product.Characteristic,
                     Base64String = Convert.ToBase64String(product.ImageArreyByte),
                 };
+
                 if (product.ChangePrices.Count > 0)
                 {
                     dto.CurrentPrice = product.ChangePrices.Max(p => p.ChangePrice);
@@ -66,6 +67,7 @@ namespace ShopParserService.Services
                     Characteristic = product.Characteristic,
                     Base64String = Convert.ToBase64String(product.ImageArreyByte),
                 };
+
                 if (product.ChangePrices.Count > 0)
                 {
                     dto.CurrentPrice = product.ChangePrices.Max(p => p.ChangePrice);
@@ -84,7 +86,7 @@ namespace ShopParserService.Services
 
         public void ParseProducts(string url)
         {
-            if (url != null && url != "")
+            if (!string.IsNullOrEmpty(url))
             {
                 try
                 {
@@ -151,6 +153,7 @@ namespace ShopParserService.Services
                             p => p.Article == parseProduct.Article,                            
                             "ChangePrices"
                         );
+
                         if (product != null)
                         {
                             //check product

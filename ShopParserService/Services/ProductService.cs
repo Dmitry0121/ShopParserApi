@@ -81,7 +81,10 @@ namespace ShopParserService.Services
                 }
                 return dto;
             }
-            return null;
+            else
+            {
+                throw new Exception("Error object not found. Article = " + article);
+            }            
         }
 
         public void ParseProducts(string url)
@@ -176,9 +179,9 @@ namespace ShopParserService.Services
                     }
                 }
                 catch (Exception ex)
-                {
-                    throw new ArgumentNullException(ex.Message);
-                }                
+                {                    
+                    throw new Exception("Error in parser logic. Message: " + ex.Message);
+                }
             }
         }
 
@@ -203,7 +206,7 @@ namespace ShopParserService.Services
             }
             catch (Exception ex)
             {
-                throw new ArgumentNullException(ex.Message);
+                throw new Exception("Error in convert a picture to an array of bytes. Message: " + ex.Message);
             }            
         }
     }

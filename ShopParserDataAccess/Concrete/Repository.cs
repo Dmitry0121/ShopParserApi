@@ -20,29 +20,43 @@ namespace ShopParserDataAccess.Concrete
 
         public IEnumerable<Product> GetAll(string includeProperties = "")
         {
-            IQueryable<Product> query = _context.Set<Product>();
-            foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            try
             {
-                query = query.Include(includeProperty);
+                IQueryable<Product> query = _context.Set<Product>();
+                foreach (var includeProperty in includeProperties.Split
+                    (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty);
+                }
+                return query;
             }
-            return query;
+            catch (Exception ex)
+            {
+                throw new Exception("Error with database. Message: " + ex.Message);
+            }            
         }
 
         public Product Get (Expression<Func<Product, bool>> filter = null, string includeProperties = "")
-        {
-            IQueryable<Product> query = _context.Set<Product>();
-            if (filter != null)
+        {           
+            try
             {
-                query = query.Where(filter);
-            }
+                IQueryable<Product> query = _context.Set<Product>();
+                if (filter != null)
+                {
+                    query = query.Where(filter);
+                }
 
-            foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                query = query.Include(includeProperty);
+                foreach (var includeProperty in includeProperties.Split
+                    (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(includeProperty);
+                }
+                return query.FirstOrDefault();
             }
-            return query.FirstOrDefault();            
+            catch (Exception ex)
+            {
+                throw new Exception("Error with database. Message: " + ex.Message);
+            }
         }
 
         public void CreateProduct(Product item)
@@ -52,10 +66,9 @@ namespace ShopParserDataAccess.Concrete
                 _context.Set<Product>().Add(item);
                 _context.SaveChanges();
             }
-            catch (DbEntityValidationException e)
+            catch (DbEntityValidationException ex)
             {
-                var newException = new DbEntityValidationException(e.Message);
-                throw newException;
+                throw new Exception("Error with database - create product. Message: " + ex.Message);
             }
         }
 
@@ -67,10 +80,9 @@ namespace ShopParserDataAccess.Concrete
                 _context.Entry(item).State = EntityState.Detached;
                 _context.SaveChanges();
             }
-            catch (DbEntityValidationException e)
+            catch (DbEntityValidationException ex)
             {
-                var newException = new DbEntityValidationException(e.Message);
-                throw newException;
+                throw new Exception("Error with database - update product. Message: " + ex.Message);
             }
         }
 
@@ -81,10 +93,9 @@ namespace ShopParserDataAccess.Concrete
                 _context.Set<Product>().Remove(item);
                 _context.SaveChanges();
             }
-            catch (DbEntityValidationException e)
+            catch (DbEntityValidationException ex)
             {
-                var newException = new DbEntityValidationException(e.Message);
-                throw newException;
+                throw new Exception("Error with database - delete product. Message: " + ex.Message);
             }
         }
 
@@ -95,10 +106,9 @@ namespace ShopParserDataAccess.Concrete
                 _context.Set<Price>().Add(item);
                 _context.SaveChanges();
             }
-            catch (DbEntityValidationException e)
+            catch (DbEntityValidationException ex)
             {
-                var newException = new DbEntityValidationException(e.Message);
-                throw newException;
+                throw new Exception("Error with database - create price. Message: " + ex.Message);
             }
         }
     }

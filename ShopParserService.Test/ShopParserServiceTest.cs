@@ -35,8 +35,6 @@ namespace ShopParserService.Test
             int article = 99;
             mock.Setup(repo => repo.Get(p => p.Article == article, "ChangePrices"))
                 .Returns(GetTestProducts().FirstOrDefault(p=>p.Article == article));
-
-            mock.Setup(repo => repo.GetAll("ChangePrices")).Returns(GetTestProducts());
             var _productService = new ProductService(mock.Object);
 
             // Act
